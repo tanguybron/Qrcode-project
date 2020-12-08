@@ -61,16 +61,14 @@ class QRCode:
         self.data_cache = None
         self.data_list = []
 
-    def add_data(self, string, optimize=20):
+    def add_data(self, string):
         """
         Add data to this QR Code.
-
-        :param optimize: Data will be split into multiple chunks to optimize
-            the QR size by finding to more compressed modes of at least this
-            length. Set to ``0`` to avoid optimizing at all.
         """
         
+        #util.QRData transforme la chaine de caractère de départ en type byte
         self.data_list.append(util.QRData(string))
+        print(self.data_list)
         self.data_cache = None
 
     def make(self, fit=True):
