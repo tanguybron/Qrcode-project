@@ -45,8 +45,7 @@ class QRCode:
 
     def __init__(self, args):
         self.version = 1
-        # constants.ERROR_CORRECT_M = 0
-        self.error_correction = int(constants.ERROR_CORRECT_M)
+        self.error_correction = 0
         self.box_size = 10
         self.border = 4
         self.image_factory = None
