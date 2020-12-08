@@ -6,7 +6,7 @@ from bisect import bisect_left
 
 ## string est la chaine de caractère que nous prenons comme argument.
 def make(string):
-    qr = QRCode(string)
+    qr = QRCode()
     qr.add_data(string)
     return qr.make_image()
 
@@ -43,7 +43,7 @@ class QRCode:
     # image_factory
     # mask_pattern
 
-    def __init__(self, args):
+    def __init__(self):
         self.version = 1
         self.error_correction = 0
         self.box_size = 10
