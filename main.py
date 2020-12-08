@@ -43,25 +43,6 @@ class QRCode:
     # image_factory
     # mask_pattern
 
-    # def __init__(self, version=None,
-    #              error_correction=constants.ERROR_CORRECT_M,
-    #              box_size=10, border=4,
-    #              image_factory=None,
-    #              mask_pattern=None):
-    #     _check_box_size(box_size)
-    #     self.version = version and int(version)
-    #     self.error_correction = int(error_correction)
-    #     self.box_size = int(box_size)
-    #     # Spec says border should be at least four boxes wide, but allow for
-    #     # any (e.g. for producing printable QR codes).
-    #     self.border = int(border)
-    #     _check_mask_pattern(mask_pattern)
-    #     self.mask_pattern = mask_pattern
-    #     self.image_factory = image_factory
-    #     if image_factory is not None:
-    #         assert issubclass(image_factory, BaseImage)
-    #     self.clear()
-
     def __init__(self, args):
         self.version = 1
         # constants.ERROR_CORRECT_M = 0
