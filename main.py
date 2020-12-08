@@ -4,10 +4,10 @@ from qrcode.image.base import BaseImage
 import six
 from bisect import bisect_left
 
-## **kwargs est un paramètre qui fonctionne comme un dictionnaire
-def make(data=None, **kwargs):
-    qr = QRCode(**kwargs)
-    qr.add_data(data)
+## string est la chaine de caractère que nous prenons comme argument.
+def make(string):
+    qr = QRCode(string)
+    qr.add_data(string)
     return qr.make_image()
 
 
@@ -43,21 +43,36 @@ class QRCode:
     # image_factory
     # mask_pattern
 
+    # def __init__(self, version=None,
+    #              error_correction=constants.ERROR_CORRECT_M,
+    #              box_size=10, border=4,
+    #              image_factory=None,
+    #              mask_pattern=None):
+    #     _check_box_size(box_size)
+    #     self.version = version and int(version)
+    #     self.error_correction = int(error_correction)
+    #     self.box_size = int(box_size)
+    #     # Spec says border should be at least four boxes wide, but allow for
+    #     # any (e.g. for producing printable QR codes).
+    #     self.border = int(border)
+    #     _check_mask_pattern(mask_pattern)
+    #     self.mask_pattern = mask_pattern
+    #     self.image_factory = image_factory
+    #     if image_factory is not None:
+    #         assert issubclass(image_factory, BaseImage)
+    #     self.clear()
+
     def __init__(self, version=None,
-                 error_correction=constants.ERROR_CORRECT_M,
-                 box_size=10, border=4,
-                 image_factory=None,
-                 mask_pattern=None):
-        _check_box_size(box_size)
-        self.version = version and int(version)
-        self.error_correction = int(error_correction)
-        self.box_size = int(box_size)
-        # Spec says border should be at least four boxes wide, but allow for
-        # any (e.g. for producing printable QR codes).
-        self.border = int(border)
-        _check_mask_pattern(mask_pattern)
-        self.mask_pattern = mask_pattern
+                error_correction=None,
+                box_size=10, border=4,
+                image_factory=None,
+                mask_pattern=None):
+        self.version = 1
+        self.error_correction = int(constants.ERROR_CORRECT_M)
+        self.box_size = 10
+        self.border = 4
         self.image_factory = image_factory
+        self.mask_pattern = mask_pattern
         if image_factory is not None:
             assert issubclass(image_factory, BaseImage)
         self.clear()
