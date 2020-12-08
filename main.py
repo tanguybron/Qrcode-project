@@ -62,19 +62,14 @@ class QRCode:
     #         assert issubclass(image_factory, BaseImage)
     #     self.clear()
 
-    def __init__(self, version=None,
-                error_correction=None,
-                box_size=10, border=4,
-                image_factory=None,
-                mask_pattern=None):
+    def __init__(self, args):
         self.version = 1
+        # constants.ERROR_CORRECT_M = 0
         self.error_correction = int(constants.ERROR_CORRECT_M)
         self.box_size = 10
         self.border = 4
-        self.image_factory = image_factory
-        self.mask_pattern = mask_pattern
-        if image_factory is not None:
-            assert issubclass(image_factory, BaseImage)
+        self.image_factory = None
+        self.mask_pattern = None
         self.clear()
 
     def clear(self):
