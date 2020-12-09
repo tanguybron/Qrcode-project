@@ -8,6 +8,7 @@ from bisect import bisect_left
 def make(string):
     qr = QRCode()
     qr.add_data(string)
+    print("ok")
     return qr.make_image()
 
 
@@ -44,7 +45,8 @@ class QRCode:
     # mask_pattern
 
     def __init__(self):
-        self.version = 1
+        #on utilise la version 2 pour avoir 25 modules
+        self.version = 2
         self.error_correction = 0
         self.box_size = 10
         self.border = 4
@@ -79,8 +81,8 @@ class QRCode:
         :param fit: If ``True`` (or if a size has not been provided), find the
             best fit for the data to avoid data overflow errors.
         """
-        if fit or (self.version is None):
-            self.best_fit(start=self.version)
+        # if fit or (self.version is None):
+        #     self.best_fit(start=self.version)
         if self.mask_pattern is None:
             self.makeImpl(False, self.best_mask_pattern())
         else:
@@ -88,6 +90,7 @@ class QRCode:
 
     def makeImpl(self, test, mask_pattern):
         _check_version(self.version)
+        #self.modules_count est le nombre de modules (on utilise du 25x25 ici)
         self.modules_count = self.version * 4 + 17
         self.modules = [None] * self.modules_count
 
@@ -266,7 +269,10 @@ class QRCode:
 
         If the data has not been compiled yet, make it first.
         """
+        # vérifie juste si la box_size est valide
         _check_box_size(self.box_size)
+
+        #Si tout va bien on entre dans le if.
         if self.data_cache is None:
             self.make()
 
