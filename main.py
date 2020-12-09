@@ -68,6 +68,7 @@ class QRCode:
         
         #util.QRData transforme la chaine de caractère de départ en type byte
         self.data_list.append(util.QRData(string))
+        #self.data_list.append(string.encode('utf8'))
         print(self.data_list)
         self.data_cache = None
 
