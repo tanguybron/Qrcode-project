@@ -89,8 +89,9 @@ class QRCode:
             self.makeImpl(False, self.mask_pattern)
 
     def makeImpl(self, test, mask_pattern):
-        _check_version(self.version)
-        #self.modules_count est le nombre de modules (on utilise du 25x25 ici)
+        # _check_version(self.version)
+        # self.modules_count est le nombre de modules (on utilise du 25x25 ici)
+        # self.modules_count = 25
         self.modules_count = self.version * 4 + 17
         self.modules = [None] * self.modules_count
 
@@ -101,9 +102,12 @@ class QRCode:
             for col in range(self.modules_count):
                 self.modules[row][col] = None   # (col + row) % 3
 
+        # mets les 3 carrés dans les coins
         self.setup_position_probe_pattern(0, 0)
         self.setup_position_probe_pattern(self.modules_count - 7, 0)
         self.setup_position_probe_pattern(0, self.modules_count - 7)
+
+
         self.setup_position_adjust_pattern()
         self.setup_timing_pattern()
         self.setup_type_info(test, mask_pattern)
@@ -234,7 +238,8 @@ class QRCode:
             out.write('\n')
         out.flush()
 
-    def make_image(self, image_factory=None, **kwargs):
+    #On enlève le **kwargs
+    def make_image(self, image_factory=None):
         """
         Make an image from the QR Code data.
 
@@ -243,7 +248,7 @@ class QRCode:
         # vérifie juste si la box_size est valide
         _check_box_size(self.box_size)
 
-        #Si tout va bien on entre dans le if.
+        # Si tout va bien on entre dans le if.
         if self.data_cache is None:
             self.make()
 
@@ -255,9 +260,14 @@ class QRCode:
                 # Use PIL by default
                 from qrcode.image.pil import PilImage
                 image_factory = PilImage
+        ## Ici, l'image est vide. On a rien mit dedans.
 
+        # On met l'image à la bonne taille : 
+        # on prend en compte le nombre de modules (ici 25), la taille de l'image, et la bordure
         im = image_factory(
-            self.border, self.modules_count, self.box_size, **kwargs)
+            self.border, self.modules_count, self.box_size)
+
+        # place les points ???
         for r in range(self.modules_count):
             for c in range(self.modules_count):
                 if self.modules[r][c]:
@@ -276,8 +286,10 @@ class QRCode:
             self.modules[6][c] = (c % 2 == 0)
 
     def setup_position_adjust_pattern(self):
-        pos = util.pattern_position(self.version)
-
+        #pos = [6,18]
+        #pos = util.pattern_position(self.version)
+        
+        pos = [6,18]
         for i in range(len(pos)):
 
             for j in range(len(pos)):
