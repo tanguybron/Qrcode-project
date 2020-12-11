@@ -252,14 +252,11 @@ class QRCode:
         if self.data_cache is None:
             self.make()
 
-        if image_factory is not None:
-            assert issubclass(image_factory, BaseImage)
-        else:
-            image_factory = self.image_factory
-            if image_factory is None:
-                # Use PIL by default
-                from qrcode.image.pil import PilImage
-                image_factory = PilImage
+        image_factory = self.image_factory
+        if image_factory is None:
+            # Use PIL by default
+            from qrcode.image.pil import PilImage
+            image_factory = PilImage
         ## Ici, l'image est vide. On a rien mit dedans.
 
         # On met l'image à la bonne taille : 
