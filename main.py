@@ -265,7 +265,7 @@ class QRCode:
         # On met l'image à la bonne taille : 
         # on prend en compte le nombre de modules (ici 25), la taille de l'image, et la bordure
         im = image_factory(
-            self.border, self.modules_count, self.box_size)
+            self.border, self.modules_count, self.box_size)# ---- Comprendre exactement comment fonctionne ces deux lignes ----
 
         # place les points ???
         for r in range(self.modules_count):
