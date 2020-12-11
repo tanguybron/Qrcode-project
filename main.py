@@ -264,7 +264,7 @@ class QRCode:
         im = image_factory(
             self.border, self.modules_count, self.box_size)# ---- Comprendre exactement comment fonctionne ces deux lignes ----
 
-        # place les points ???
+        # place les petits carrés du qr code (l'information)
         for r in range(self.modules_count):
             for c in range(self.modules_count):
                 if self.modules[r][c]:
