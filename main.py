@@ -93,6 +93,7 @@ class QRCode:
         # self.modules_count est le nombre de modules (on utilise du 25x25 ici)
         # self.modules_count = 25
         self.modules_count = self.version * 4 + 17
+        # met tous les modules à None
         self.modules = [None] * self.modules_count
 
         for row in range(self.modules_count):
@@ -108,18 +109,23 @@ class QRCode:
         self.setup_position_probe_pattern(0, self.modules_count - 7)
 
 
+        # ==================================================== #
+        ## comprendre pourquoi c'est utile (sans cela, le qr code est créé mais illisible)
         self.setup_position_adjust_pattern()
         self.setup_timing_pattern()
         self.setup_type_info(test, mask_pattern)
+        # à voir Jojo ou Tristan
+        # ==================================================== #
 
-        if self.version >= 7:
-            self.setup_type_number(test)
 
         if self.data_cache is None:
             self.data_cache = util.create_data(
                 self.version, self.error_correction, self.data_list)
         self.map_data(self.data_cache, mask_pattern)
 
+
+    ## Dessine les deux carrés imbriqués qui servent à délimiter le Qr code.
+    ## Il commence à partir du coin supérieur gauche (dont il faut renseigner la position dans row et col en argument)
     def setup_position_probe_pattern(self, row, col):
         for r in range(-1, 8):
 
@@ -255,6 +261,7 @@ class QRCode:
         image_factory = self.image_factory
         if image_factory is None:
             # Use PIL by default
+            ## Utilise la classe PilImage écritent dans ./images/pil.py
             from qrcode.image.pil import PilImage
             image_factory = PilImage
         ## Ici, l'image est vide. On a rien mit dedans.
@@ -262,12 +269,15 @@ class QRCode:
         # On met l'image à la bonne taille : 
         # on prend en compte le nombre de modules (ici 25), la taille de l'image, et la bordure
         im = image_factory(
-            self.border, self.modules_count, self.box_size)# ---- Comprendre exactement comment fonctionne ces deux lignes ----
-
+            self.border, self.modules_count, self.box_size) # ---- Comprendre exactement comment fonctionne ces deux lignes ----
+        print(self.modules)
         # place les petits carrés du qr code (l'information)
+        ## On place les carrés en les parcourant ligne par ligne
         for r in range(self.modules_count):
             for c in range(self.modules_count):
+                # Si module est false le carré reste blanc, sinon on le colorie
                 if self.modules[r][c]:
+                    # drawrect dessine un rectangle : la fonction a été écrite dans la classe PilImage dans ./images/pil.py
                     im.drawrect(r, c)
         return im
 
@@ -359,7 +369,7 @@ class QRCode:
 
         data_len = len(data)
 
-        for col in six.moves.xrange(self.modules_count - 1, 0, -2):
+        for col in range(self.modules_count - 1, 0, -2):
 
             if col <= 6:
                 col -= 1
