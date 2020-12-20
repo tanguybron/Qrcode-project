@@ -119,8 +119,10 @@ class QRCode:
 
 
         if self.data_cache is None:
+            ## create data ?
             self.data_cache = util.create_data(
                 self.version, self.error_correction, self.data_list)
+            print(self.data_cache)
         self.map_data(self.data_cache, mask_pattern)
 
 
@@ -270,7 +272,7 @@ class QRCode:
         # on prend en compte le nombre de modules (ici 25), la taille de l'image, et la bordure
         im = image_factory(
             self.border, self.modules_count, self.box_size) # ---- Comprendre exactement comment fonctionne ces deux lignes ----
-        print(self.modules)
+        #print(self.modules)
         # place les petits carrés du qr code (l'information)
         ## On place les carrés en les parcourant ligne par ligne
         for r in range(self.modules_count):
@@ -369,13 +371,14 @@ class QRCode:
 
         data_len = len(data)
 
+        #print(self.modules)
+
         for col in range(self.modules_count - 1, 0, -2):
 
             if col <= 6:
                 col -= 1
 
             col_range = (col, col-1)
-
             while True:
 
                 for c in col_range:
@@ -404,23 +407,23 @@ class QRCode:
                     inc = -inc
                     break
 
-    def get_matrix(self):
-        """
-        Return the QR Code as a multidimensonal array, including the border.
+    # def get_matrix(self):
+    #     """
+    #     Return the QR Code as a multidimensonal array, including the border.
 
-        To return the array without a border, set ``self.border`` to 0 first.
-        """
-        if self.data_cache is None:
-            self.make()
+    #     To return the array without a border, set ``self.border`` to 0 first.
+    #     """
+    #     if self.data_cache is None:
+    #         self.make()
 
-        if not self.border:
-            return self.modules
+    #     if not self.border:
+    #         return self.modules
 
-        width = len(self.modules) + self.border*2
-        code = [[False]*width] * self.border
-        x_border = [False]*self.border
-        for module in self.modules:
-            code.append(x_border + module + x_border)
-        code += [[False]*width] * self.border
+    #     width = len(self.modules) + self.border*2
+    #     code = [[False]*width] * self.border
+    #     x_border = [False]*self.border
+    #     for module in self.modules:
+    #         code.append(x_border + module + x_border)
+    #     code += [[False]*width] * self.border
 
-        return code
+    #     return code
