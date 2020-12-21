@@ -152,12 +152,12 @@ class QRCode:
         """
         min_lost_point = 0
         pattern = 0
-
         for i in range(8):
+            ## fait le qr code (la map et les données)
             self.makeImpl(True, i)
 
             lost_point = util.lost_point(self.modules)
-
+            print(lost_point)
             if i == 0 or min_lost_point > lost_point:
                 min_lost_point = lost_point
                 pattern = i

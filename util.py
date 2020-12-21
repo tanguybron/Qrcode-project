@@ -172,18 +172,18 @@ def length_in_bits(mode, version):
     return mode_sizes_for_version(version)[mode]
 
 
-def lost_point(modules):
-    modules_count = len(modules)
+# def lost_point(modules):
+#     modules_count = len(modules)
 
-    lost_point = 0
+#     lost_point = 0
 
-    lost_point = _lost_point_level1(modules, modules_count)
-    lost_point += _lost_point_level2(modules, modules_count)
-    lost_point += _lost_point_level3(modules, modules_count)
-    lost_point += _lost_point_level4(modules, modules_count)
+#     lost_point = _lost_point_level1(modules, modules_count)
+#     # lost_point += _lost_point_level2(modules, modules_count)
+#     # lost_point += _lost_point_level3(modules, modules_count)
+#     # lost_point += _lost_point_level4(modules, modules_count)
 
-    return lost_point
-
+#     print(lost_point)
+#     return lost_point
 
 def _lost_point_level1(modules, modules_count):
     lost_point = 0
@@ -220,8 +220,9 @@ def _lost_point_level1(modules, modules_count):
         if length >= 5:
             container[length] += 1
 
-    lost_point += sum(container[each_length] * (each_length - 2)
-        for each_length in xrange(5, modules_count + 1))
+    # lost_point += sum(container[each_length] * 4#(each_length - 2)
+    
+    #     for each_length in xrange(5, modules_count + 1))
 
     return lost_point
 
