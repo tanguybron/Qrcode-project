@@ -1,5 +1,7 @@
-from qrcode import constants, exceptions, util
-from qrcode.image.base import BaseImage
+#from qrcode import constants, exceptions, util
+import util,constants,exceptions
+#from qrcode.image.base import BaseImage
+from image.base import BaseImage
 
 import six
 from bisect import bisect_left
