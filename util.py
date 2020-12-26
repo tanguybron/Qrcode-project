@@ -389,6 +389,7 @@ def to_bytestring(data):
     already.
     """
     if not isinstance(data, six.binary_type):
+        print("##### encoding....")
         data = six.text_type(data).encode('utf-8')
     return data
 
@@ -398,10 +399,14 @@ def optimal_mode(data):
     Calculate the optimal mode for this chunk of data.
     """
     if data.isdigit():
+        print("####### numbers")
         return MODE_NUMBER
     if RE_ALPHA_NUM.match(data):
+        print("###### alpha")
         return MODE_ALPHA_NUM
-    return MODE_8BIT_BYTE
+    else:
+        print("###### byte")
+        return MODE_8BIT_BYTE
 
 
 class QRData:
@@ -416,11 +421,14 @@ class QRData:
         If ``mode`` isn't provided, the most compact QR data type possible is
         chosen.
         """
+        print("###### data_in: ", data)
         if check_data:
             data = to_bytestring(data)
+            print("##### data_byte: ", data)
 
         if mode is None:
             self.mode = optimal_mode(data)
+            print("###### mode_optimal: ", self.mode)
         else:
             self.mode = mode
             if mode not in (MODE_NUMBER, MODE_ALPHA_NUM, MODE_8BIT_BYTE):
@@ -431,6 +439,8 @@ class QRData:
                     "{0}".format(mode))
 
         self.data = data
+        print("###### mode_out: ", self.mode)
+        print("###### data_out: ", data)
 
     def __len__(self):
         return len(self.data)
@@ -569,22 +579,24 @@ def create_bytes(buffer, rs_blocks):
 def create_data(version, error_correction, data_list):
     ## data list c'est la string convertie en bytes (data_list = [b'perso.esiee.fr/~vigierj'] )
     buffer = BitBuffer()
-    print(buffer)
+    print("###### buffer: ", buffer)
     ## error_correction = 0
-    print(error_correction)
+    print("###### error_correction: ", error_correction)
     # comme data_list est une liste d'un seul élément, on ne rentre qu'une fois dans le for each ci dessous.
 
     for data in data_list:
-        print(data)
+        print("######## data: ", data)
         ## data.mode = 4
-        # On ajoute dans le buffer le mode de données et la taille de la chaine
+        # On ajoute dans le buffer le mode de données sur 4 bits
         buffer.put(data.mode, 4)
+        print("###### taille des données: ", len(data))
+        print("###### codage sur:", length_in_bits(data.mode, version), "bits")
         buffer.put(len(data), length_in_bits(data.mode, version))
-        print(buffer)
+        print("###### buffer: ", buffer)
         # On ajoute tous les caractères de la chaine 1 par 1.
         data.write(buffer)
     
-    print(buffer)
+    print("###### buffer: ", buffer)
     ## Buffer : 65.119.6.87.39.54.242.230.87.54.150.86.82.230.103.34.247.231.102.150.118.150.87.38.160
 
     # Calculate the maximum number of bits for the given version.

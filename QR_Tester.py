@@ -6,6 +6,7 @@ from main import make
 
 #qr = make('perso.esiee.fr/~vigierj')
 qr = make('Hello, world!')
+# qr = make('123456')
 
 
 qr.save('qr_img.png')

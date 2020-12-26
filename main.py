@@ -1,7 +1,7 @@
 #from qrcode import constants, exceptions, util
 import util,constants,exceptions
 #from qrcode.image.base import BaseImage
-from image.base import BaseImage
+import image.base
 
 import six
 from bisect import bisect_left
@@ -9,8 +9,10 @@ from bisect import bisect_left
 ## string est la chaine de caractère que nous prenons comme argument.
 def make(string):
     qr = QRCode()
+    print("####### initial String: ", string)
     qr.add_data(string)
-    print("ok")
+    print("##### data added")
+    print("")
     return qr.make_image()
 
 
@@ -69,11 +71,13 @@ class QRCode:
         """
         Add data to this QR Code.
         """
+
+        print("####### version: ", self.version)
         
         #util.QRData transforme la chaine de caractère de départ en type byte
         self.data_list.append(util.QRData(string))
         #self.data_list.append(string.encode('utf8'))
-        print(self.data_list)
+        print("###### data_list: ", self.data_list)
         self.data_cache = None
 
     def make(self, fit=True):
@@ -83,6 +87,7 @@ class QRCode:
         :param fit: If ``True`` (or if a size has not been provided), find the
             best fit for the data to avoid data overflow errors.
         """
+        print("###### mask_pattern: ", self.mask_pattern)
         # if fit or (self.version is None):
         #     self.best_fit(start=self.version)
         if self.mask_pattern is None:
