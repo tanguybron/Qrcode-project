@@ -4,7 +4,7 @@ import math
 import six
 from six.moves import xrange
 
-from qrcode import base, exceptions, LUT
+import base, exceptions, LUT
 
 # QR encoding modes.
 MODE_NUMBER = 1 << 0
@@ -182,7 +182,6 @@ def lost_point(modules):
     lost_point += _lost_point_level3(modules, modules_count)
     lost_point += _lost_point_level4(modules, modules_count)
 
-    print(lost_point)
     return lost_point
 
 def _lost_point_level1(modules, modules_count):
@@ -227,6 +226,7 @@ def _lost_point_level1(modules, modules_count):
     return lost_point
 
 
+## Level 2 : On regarde bloque de 4 par bloque de 4 ???
 def _lost_point_level2(modules, modules_count):
     lost_point = 0
 
@@ -334,6 +334,7 @@ def _lost_point_level4(modules, modules_count):
     dark_count = sum(map(sum, modules))
     percent = float(dark_count) / (modules_count**2)
     # Every 5% departure from 50%, rating++
+    # abs retourne la valeur absolue du nombre passé en argument
     rating = int(abs(percent * 100 - 50) / 5)
     return rating * 10
 
@@ -449,14 +450,18 @@ class QRData:
                         ALPHA_NUM.find(chars[1]), 11)
                 else:
                     buffer.put(ALPHA_NUM.find(chars), 6)
+        ## Si tout va bien on va dans le else
         else:
+            ## On entre dans le if
             if six.PY3:
                 # Iterating a bytestring in Python 3 returns an integer,
                 # no need to ord().
                 data = self.data
             else:
                 data = [ord(c) for c in self.data]
+            ## prend chaque caractère de la string et la traduit en ascii (c'est pour cela qu'on a du convertir la string en byte avant.)
             for c in data:
+                #print(c)
                 buffer.put(c, 8)
 
     def __repr__(self):
@@ -478,16 +483,21 @@ class BitBuffer:
 
     def put(self, num, length):
         for i in range(length):
+            # True ou False en argument
             self.put_bit(((num >> (length - i - 1)) & 1) == 1)
 
     def __len__(self):
         return self.length
 
     def put_bit(self, bit):
+        #print(self.length)
+        ## // arrondi à l'entier le plus proche du résultat de la division effectuée.
         buf_index = self.length // 8
         if len(self.buffer) <= buf_index:
+            # On met 0 car 0000 est l'indicateur de fin de code
             self.buffer.append(0)
         if bit:
+            ## a |= b équivaut à a = a | b
             self.buffer[buf_index] |= (0x80 >> (self.length % 8))
         self.length += 1
 
@@ -557,18 +567,33 @@ def create_bytes(buffer, rs_blocks):
 
 
 def create_data(version, error_correction, data_list):
-
+    ## data list c'est la string convertie en bytes (data_list = [b'perso.esiee.fr/~vigierj'] )
     buffer = BitBuffer()
+    print(buffer)
+    ## error_correction = 0
+    print(error_correction)
+    # comme data_list est une liste d'un seul élément, on ne rentre qu'une fois dans le for each ci dessous.
+
     for data in data_list:
+        print(data)
+        ## data.mode = 4
+        # On ajoute dans le buffer le mode de données et la taille de la chaine
         buffer.put(data.mode, 4)
         buffer.put(len(data), length_in_bits(data.mode, version))
+        print(buffer)
+        # On ajoute tous les caractères de la chaine 1 par 1.
         data.write(buffer)
+    
+    print(buffer)
+    ## Buffer : 65.119.6.87.39.54.242.230.87.54.150.86.82.230.103.34.247.231.102.150.118.150.87.38.160
 
     # Calculate the maximum number of bits for the given version.
     rs_blocks = base.rs_blocks(version, error_correction)
     bit_limit = 0
     for block in rs_blocks:
         bit_limit += block.data_count * 8
+
+    print(bit_limit)
 
     if len(buffer) > bit_limit:
         raise exceptions.DataOverflowError(
@@ -592,5 +617,5 @@ def create_data(version, error_correction, data_list):
             buffer.put(PAD0, 8)
         else:
             buffer.put(PAD1, 8)
-
+    
     return create_bytes(buffer, rs_blocks)

@@ -118,7 +118,7 @@ class QRCode:
         self.setup_type_info(test, mask_pattern)
         # à voir Jojo ou Tristan
         # ==================================================== #
-
+        
 
         if self.data_cache is None:
             ## create data ?
@@ -126,6 +126,9 @@ class QRCode:
                 self.version, self.error_correction, self.data_list)
             print(self.data_cache)
         self.map_data(self.data_cache, mask_pattern)
+
+
+
 
 
     ## Dessine les deux carrés imbriqués qui servent à délimiter le Qr code.
@@ -148,6 +151,7 @@ class QRCode:
                 else:
                     self.modules[row + r][col + c] = False
 
+
     def best_mask_pattern(self):
         """
         Find the most efficient mask pattern.
@@ -157,9 +161,8 @@ class QRCode:
         for i in range(8):
             ## fait le qr code (la map et les données)
             self.makeImpl(True, i)
-
             lost_point = util.lost_point(self.modules)
-            print(lost_point)
+            #print(lost_point)
             if i == 0 or min_lost_point > lost_point:
                 min_lost_point = lost_point
                 pattern = i
@@ -277,6 +280,7 @@ class QRCode:
         #print(self.modules)
         # place les petits carrés du qr code (l'information)
         ## On place les carrés en les parcourant ligne par ligne
+
         for r in range(self.modules_count):
             for c in range(self.modules_count):
                 # Si module est false le carré reste blanc, sinon on le colorie
@@ -370,7 +374,6 @@ class QRCode:
         byteIndex = 0
 
         mask_func = util.mask_func(mask_pattern)
-
         data_len = len(data)
 
         #print(self.modules)

@@ -352,5 +352,5 @@ def rs_blocks(version, error_correction):
         count, total_count, data_count = rs_block[i:i + 3]
         for j in range(count):
             blocks.append(RSBlock(total_count, data_count))
-
+            
     return blocks
